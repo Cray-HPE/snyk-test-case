@@ -1,0 +1,37 @@
+name: Example workflow for Docker using Snyk 
+on: 
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'     
+        required: true
+        default: 'warning'
+      tags:
+        description: 'Test scenario tags'  
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+    - name: hello
+      uses: actions/hello-world-docker-action@master
+      with:
+        who-to-greet: 'Joe'
+
+    - name: info-checkout
+      run: echo "Checkout under $GITHUB_WORKSPACE"
+
+    - name: checkout
+      uses: actions/checkout@v2
+      with:
+        path: ''
+
+    - name: info-filelist
+      run: find $GITHUB_WORKSPACE
+
+    - name: snyk-test
+      uses: snyk/actions/docker@master
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      with:
+        image: mladkau/snyk-test-case:latest
+        args: --file=Dockerfile --exclude-base-image-vulns --policy-path=.snyk
