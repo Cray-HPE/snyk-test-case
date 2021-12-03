@@ -34,4 +34,4 @@ jobs:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       with:
         image: mladkau/snyk-test-case:latest
-        args: --file=Dockerfile --exclude-base-image-vulns --policy-path=.snyk
+        args: --policy-path=.snyk
